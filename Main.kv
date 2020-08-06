@@ -1,0 +1,345 @@
+#:import Factory kivy.factory.Factory
+Manager:
+	Menu:
+		name:'menu'
+	Game:
+		name:'game'
+	Level:
+		name:'levels'
+<Menu>:
+	BoxLayout:
+		orientation: 'vertical'
+		    
+		BoxLayout:
+			orientation: 'vertical'
+			padding: '50dp'
+			spacing: '20dp'
+			
+			Button:
+				text: 'ИГРАТЬ'
+				on_release:
+					app.root.transition.direction = 'down'
+					app.root.current = 'levels'
+										
+			Button:
+				text: 'Выйти'
+				on_release:
+					app.stop()
+<Hero>:
+	source: 'hero.png'
+
+<LevelButton>:
+	
+<Level>:
+    GridLayout:
+		cols: 3
+        orientation: "horizontal"
+		paddind: '50dp'
+		spacing: '20dp'
+		id: lvl_button
+		canvas:
+			#Color:
+				#rgba: 0,0,0,1
+			Rectangle:
+				size: self.size
+				pos: self.pos
+			
+
+
+<Pause@Popup>:
+	opacity: 1
+	background_normal: ''
+	separator_color: 0, 0, 0, 0
+	background_color: 0, 0, 0, 0
+	title: ''
+	size_hint: .3,.5
+    auto_dismiss: False
+	
+	AnchorLayout:
+		anchor_x: 'center'
+		anchor_y: 'center'
+		#UN ПАУЗА
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'top'
+			Button:
+				size_hint: None, None
+				size: 62,56
+				background_normal:
+					'button-play.png'
+				on_release: 
+					app.root.get_screen('game').un_pause()
+					root.dismiss()	
+		# ПЕРЕЗАПУСК 
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'center'
+			Button:
+				size_hint: None, None
+				size: 70,70
+				background_normal:
+					'restart.png'
+				on_release:
+					root.dismiss()
+					app.root.get_screen('game').refresh()
+					app.root.get_screen('game').desing_lvl()
+					app.root.get_screen('game').un_pause()
+									
+		# ВЫЙТИ В МЕНЮ
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'bottom'
+			Button:
+				size_hint: None, None
+				size: 70,70
+				background_normal:
+					'home.png'
+				on_release: 
+					root.dismiss()
+					app.root.current = 'menu'		
+
+<GameOver@Popup>:
+	opacity: 1
+	background_normal: ''
+	separator_color: 0, 0, 0, 0
+	background_color: 0, 0, 0, 0
+	title: 'fsdf'
+	size_hint: .8,.5
+    auto_dismiss: False
+	#font_color:
+		#rgba: 0,0,0,1
+	BoxLayout:
+		orientation: 'vertical'
+		canvas:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+				size: self.size
+				pos: self.pos
+		canvas.before:
+			Color:
+				rgba: 0, 0, 0, 1
+			Line:
+				width: 10
+				joint: 'miter'
+				rectangle: self.x - 10, self.y + 15, self.width - 15, self.height - 10
+		
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'center'
+			Label:
+				font_name: "3Dventure.ttf"
+				size_hint:None, None
+				
+				color: 0,0,0,1 # <-----------
+				canvas.before:
+					Color:
+						rgba: 1, 1, 1, 0
+					Rectangle:
+						pos: self.pos
+						size: self.size
+				text: '☆ ☆ ☆'
+				font_size: '40sp'
+				bold: True
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'center'
+			Label:
+				font_name: "3Dventure.ttf"
+				size_hint:None, None
+				
+				color: 0,0,0,1 # <-----------
+				canvas.before:
+					Color:
+						rgba: 1, 1, 1, 0
+					Rectangle:
+						pos: self.pos
+						size: self.size
+				text: '74.0'
+				font_size: '40sp'
+				bold: True
+		AnchorLayout:
+			anchor_x: 'center'
+			anchor_y: 'center'
+			Label:
+				font_name: "3Dventure.ttf"
+				size_hint:None, None
+				
+				color: 0,0,0,1 # <-----------
+				canvas.before:
+					Color:
+						rgba: 1, 1, 1, 0
+					Rectangle:
+						pos: self.pos
+						size: self.size
+				text: '74.0'
+				font_size: '40sp'
+				bold: True
+		
+<Menus@Button>:
+    text: self.text
+	font_size: '40sp'
+	color: 0,0,0,1
+	font_name: "3Dventure.ttf"
+	background_normal: 'button_level.png'
+    on_press: 
+		app.root.get_screen('levels').pars(str(self.text))
+		
+<Pixel@Button>:
+	canvas.before:
+		Color:
+			rgba: 0, 0, 0, 1
+		Line:
+			width: 3
+			joint: 'miter'
+			rectangle: self.x, self.y, self.width, self.height
+	size_hint:None, None
+	size: 25, 25 
+	text: ''
+	font_size: 25
+	background_color: [1,1,1,1]
+	background_normal: ''
+	#disabled: True
+	background_down: ''
+<Game>:
+	BoxLayout:
+		orientation: 'vertical'
+		AnchorLayout:
+			size_hint: 1,1
+			anchor_x: 'center'
+			anchor_y: 'center'
+			padding: '10dp'
+			canvas:
+				#Color:
+					#rgba: 0,0,0,1
+				Rectangle:
+					size: self.size
+					pos: self.pos
+			
+			# СЛЕДУЮЩИЙ ЦВЕТ
+			AnchorLayout:
+				
+				anchor_x: 'left'
+				anchor_y: 'top'
+				size: 50,50
+				Button:
+					
+					canvas.before:
+						Color:
+							rgba: 0, 0, 0, 1
+						Line:
+							width: 5
+							joint: 'miter'
+							rectangle: self.x, self.y, self.width, self.height
+					size_hint:None, None
+					size: 45, 45 
+					id: nextcolor
+					text: ''
+					font_size: 25
+					background_color: [1,1,1,1]
+					background_normal: ''
+					
+			# СЧЕТЧИК		
+			AnchorLayout:
+				anchor_x: 'center'
+				anchor_y: 'top'
+				Label:
+					font_name: "3Dventure.ttf"
+					size_hint:None, None
+					size: 50, 50 
+					color: 0,0,0,1
+					text: str(root.LabelScore)
+					font_size: '40sp'
+					bold: True
+					
+			# ПАУЗА		
+			AnchorLayout:
+				anchor_x: 'right'
+				anchor_y: 'top'
+				Button:
+					size_hint:None, None
+					size: 50, 50 
+					background_normal: 'button-pause.png'
+					on_release:
+						root.on_pause()
+						Factory.Pause().open()
+			
+			
+			
+			
+			
+			GridLayout:
+				id: glem
+				cols: 7
+				orientation: 'horizontal'
+				paddind: '3dp'
+				spacing: '3dp'
+				size_hint: None,None
+				size: 175, 150
+				canvas:
+					#Color:
+						#rgba: 1,1,1,1
+					Rectangle:
+					
+						size: self.size
+						pos: self.pos
+
+			AnchorLayout:
+				anchor_x: 'center'
+				anchor_y: 'bottom'
+				Hero:
+					id: hero
+					allow_stretch: True
+					size_hint: None,None
+					size: root.height/15,root.height/15
+					x: root.width/20
+					y: root.height/2
+
+
+			
+				
+<Block>:
+	canvas:
+		Color:
+			rgba: self.color
+		Rectangle:
+			size: self.size
+			pos: self.pos
+	canvas.before:
+		Color:
+			rgba: 0, 0, 0, 1
+		Line:
+			width: 2
+			joint: 'miter'
+			rectangle: self.x, self.y, self.width, self.height
+	size_hint: None,None
+	width: '25dp'
+	height: '25dp'
+			
+
+<Drawing>:
+	#size: 25,25
+	Button:
+		canvas.before:
+			Color:
+				rgba: 1, 0, 0, 1
+			Line:
+				width: 2
+				joint: 'miter'
+				rectangle: self.x, self.y, self.width, self.height
+		size_hint:None, None
+		size: self.size
+		
+		text: self.text
+		font_size: 25
+		background_color: self.background_color
+		background_normal: self.background_normal
+		background_disabled_normal: ''
+		disabled: self.disabled
+			
+			
+			
+			
+			
+			
+		
